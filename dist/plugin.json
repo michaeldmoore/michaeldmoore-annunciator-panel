@@ -1,0 +1,24 @@
+{
+  "type": "panel",
+  "name": "Annunciator",
+  "id": "michaeldmoore-annunciator-panel",
+
+  "info": {
+    "description": "Enhanced versin of built-in SingleStat panel, with specialized display of thresholds and value-sensative presentation",
+    "author": {
+      "name": "Michael Moore",
+      "url": "https://michaelmoore.org"
+    },
+    "keywords": ["annunciator", "singlestat", "panel"],
+    "version": "1.0.0",
+    "updated": "2017-06-17",
+    "logos": {
+      "small": "img/michaeldmoore-annunciator-panel.svg",
+      "large": "img/michaeldmoore-annunciator-panel.svg"
+    }
+  },
+  "dependencies": {
+    "grafanaVersion": "3.x.x",
+    "plugins": [ ]
+  }
+}

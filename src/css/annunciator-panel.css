@@ -1,0 +1,93 @@
+.michaeldmoore-annunciator-panel-w4 {
+  width: 3.75rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-w5 {
+  width: 4.75rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-w6 {
+  width: 5.75rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-w7 {
+  width: 6.75rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-w9 {
+  width: 8.75rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-w19 {
+  width: 19.00rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
+.michaeldmoore-annunciator-panel-container {
+  position: relative;
+  display: table;
+  width: 100%;
+}
+
+.michaeldmoore-annunciator-panel-value-container {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+  font-size: 3em;
+  font-weight: bold;
+}
+
+.michaeldmoore-annunciator-panel-prefix {
+  padding: 20px;
+}
+
+.michaeldmoore-annunciator-panel-value {
+}
+
+.michaeldmoore-annunciator-panel-postfix {
+  padding-left: 20px;
+}
+
+.michaeldmoore-annunciator-panel-limits-container {
+  font-size: 3em;
+}
+
+.michaeldmoore-annunciator-panel-lower-limit {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.michaeldmoore-annunciator-panel-upper-limit {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.michaeldmoore-annunciator-flash {
+  animation: michaeldmoore-annunciator-flash 1s infinite;
+}
+
+@keyframes michaeldmoore-annunciator-flash {
+  0% { font-weight: bold; }
+  50% { font-weight: normal; }
+  100% { font-weight: bold; } 
+}
