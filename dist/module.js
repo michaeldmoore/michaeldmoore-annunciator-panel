@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'angular', 'app/core/utils/kbn', 'app/core/config', 'app/core/time_series2'], function (_export, _context) {
+System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'jquery', 'jquery.flot', 'angular', 'app/core/utils/kbn', 'app/core/config', 'app/core/time_series2'], function (_export, _context) {
     "use strict";
 
-    var MetricsPanelCtrl, _, angular, kbn, config, TimeSeries, _createClass, AnnunciatorPanelCtrl;
+    var MetricsPanelCtrl, _, $, angular, kbn, config, TimeSeries, _createClass, AnnunciatorPanelCtrl;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -40,7 +40,9 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
             MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
         }, function (_cssAnnunciatorPanelCss) {}, function (_lodash) {
             _ = _lodash.default;
-        }, function (_angular) {
+        }, function (_jquery) {
+            $ = _jquery.default;
+        }, function (_jqueryFlot) {}, function (_angular) {
             angular = _angular.default;
         }, function (_appCoreUtilsKbn) {
             kbn = _appCoreUtilsKbn.default;
@@ -72,59 +74,66 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                 _inherits(AnnunciatorPanelCtrl, _MetricsPanelCtrl);
 
                 /** @ngInject */
-                function AnnunciatorPanelCtrl($scope, $injector) {
+                function AnnunciatorPanelCtrl($scope, $injector, alertSrv) {
                     _classCallCheck(this, AnnunciatorPanelCtrl);
 
                     var _this = _possibleConstructorReturn(this, (AnnunciatorPanelCtrl.__proto__ || Object.getPrototypeOf(AnnunciatorPanelCtrl)).call(this, $scope, $injector));
+
+                    _this.alertSrv = alertSrv;
 
                     var panelDefaults = {
                         "LowerLimit": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(2, 17, 249)",
                             "Value": "20",
-                            "FontSize": "100%"
+                            "Decimals": "1",
+                            "FontSize": "50%"
                         },
                         "LowerWarning": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(9, 115, 102)",
                             "Value": "25"
                         },
-                        "OK": {
-                            "Color": "rgb(2, 247, 2)"
-                        },
-                        "UpperLimit": {
-                            "DisplayOption": "disabled",
-                            "Color": "rgb(247, 2, 2)",
-                            "Value": "80"
+                        "Metric": {
+                            "Name": "current",
+                            "Format": "percent",
+                            "Color": "rgb(2, 247, 2)",
+                            "Decimals": "4",
+                            "FontSize": "100%"
                         },
                         "UpperWarning": {
                             "DisplayOption": "disabled",
-                            "Color": "rgb(247, 90, 7)",
-                            "Value": "75",
-                            "FontSize": "100%"
+                            "Color": "rgb(247, 2, 2)",
+                            "Value": "75"
                         },
-                        "decimals": 2,
-                        "format": "percent",
-                        "postfix": "POST",
-                        "postfixFontSize": "100%",
-                        "prefix": "PRE",
-                        "prefixFontSize": "100%",
+                        "UpperLimit": {
+                            "DisplayOption": "disabled",
+                            "Color": "rgb(247, 90, 7)",
+                            "Value": "80",
+                            "Decimals": "2",
+                            "FontSize": "50%"
+                        },
+                        "Prefix": {
+                            "Text": "",
+                            "FontSize": "hide"
+                        },
+                        "Postfix": {
+                            "Text": "",
+                            "FontSize": "hide"
+                        },
                         "sparkline": {
                             "fillColor": "rgba(19, 193, 91, 0.32)",
                             "full": false,
                             "lineColor": "rgb(145, 200, 16)",
                             "show": true
-                        },
-                        "valueFontSize": "100%",
-                        "valueName": "current"
+                        }
                     };
 
                     var panel = {};
-                    //		var $panelContainer = elem.find('.panel-container');
-                    var elem = {}; //this.panel.find('.singlestat-panel');
+                    var elem = {};
                     var ctrl = {};
 
-                    _.defaults(_this.panel, _this.panelDefaults);
+                    _.defaults(_this.panel, panelDefaults);
 
                     _this.events.on('render', _this.onRender.bind(_this));
                     _this.events.on('data-received', _this.onDataReceived.bind(_this));
@@ -136,24 +145,24 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                 _createClass(AnnunciatorPanelCtrl, [{
                     key: 'onDataError',
                     value: function onDataError(err) {
-                        console.log("Annunciator::onDataError", err);
+                        this.alertSrv.set('Annunciator Data Error', err, 'error', 5000);
                         this.seriesList = [];
                         this.render([]);
                     }
                 }, {
                     key: 'onInitEditMode',
                     value: function onInitEditMode() {
-                        this.valueNameOptions = ['min', 'max', 'avg', 'current', 'total', 'name', 'first', 'delta', 'diff', 'range'];
+                        this.metricNames = ['min', 'max', 'avg', 'current', 'total', 'name', 'first', 'delta', 'diff', 'range'];
                         this.fontSizes = ['20%', '30%', '50%', '70%', '80%', '100%', '110%', '120%', '150%', '170%', '200%'];
-                        this.fontSizes0 = [''].concat(this.fontSizes);
-                        this.valueDisplayOptions = ['disabled', 'static', 'flash'];
+                        this.fontSizes0 = ['hide'].concat(this.fontSizes);
+                        this.displayStates = ['disabled', 'static', 'flash'];
                         this.unitFormats = kbn.getUnitFormats();
                         this.addEditorTab('Options', 'public/plugins/michaeldmoore-annunciator-panel/options.html', 2);
                     }
                 }, {
                     key: 'setUnitFormat',
                     value: function setUnitFormat(subItem) {
-                        this.panel.format = subItem.value;
+                        this.panel.Metric.Format = subItem.value;
                         this.render();
                     }
                 }, {
@@ -169,15 +178,13 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                             if (value <= this.panel.LowerLimit.Value) valueRegion = "LowerLimit";else if (this.panel.LowerWarning.DisplayOption != 'disabled' && value <= this.panel.LowerWarning.Value) valueRegion = "LowerWarning";
                         }
 
-                        //console.log ("this.getValueRegion(" + value + ")=" + valueRegion);
-
                         return valueRegion;
                     }
                 }, {
                     key: 'getDisplayAttributesForValue',
                     value: function getDisplayAttributesForValue(value, metric) {
                         var displayAttributes = {};
-                        var color = this.panel.OK.Color;
+                        var color = this.panel.Metric.Color;
                         var flash = false;
 
                         var valueRegion = this.getValueRegion(this.data.value);
@@ -222,42 +229,41 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                         displayAttributes.color = color;
                         displayAttributes.flash = flash;
 
-                        //console.log ("this.getDisplayAttributesForValue(" + value + ", '" + metric + "'), color=" + color + ", flash=" + flash);
                         return displayAttributes;
                     }
                 }, {
                     key: 'buildValueHtml',
                     value: function buildValueHtml() {
-                        var html1 = '';
+                        var html = '';
 
-                        html1 += "<div class='michaeldmoore-annunciator-panel-value-container'>";
-                        if (this.panel.prefix) html1 += this.getTextSpan('michaeldmoore-annunciator-panel-prefix', this.panel.prefixFontSize, '', this.panel.prefix, false);
+                        html += "<div class='michaeldmoore-annunciator-panel-value-container'>";
+                        if (this.panel.Prefix.Text != '' && this.panel.Prefix.FontSize != 'hide') html += this.getTextSpan('michaeldmoore-annunciator-panel-prefix', this.panel.Prefix.FontSize, '', this.panel.Prefix.Text, false);
 
-                        html1 += this.getValueSpan('michaeldmoore-annunciator-panel-value', this.panel.valueFontSize, this.data.value, "Value");
+                        html += this.getValueSpan('michaeldmoore-annunciator-panel-value', this.panel.Metric.FontSize, this.panel.Metric.Decimals, this.data.value, "Value");
 
-                        if (this.panel.postfix) html1 += this.getTextSpan('michaeldmoore-annunciator-panel-postfix', this.panel.postfixFontSize, '', this.panel.postfix, false);
+                        if (this.panel.Postfix.Text != '' && this.panel.Postfix.FontSize != 'hide') html += this.getTextSpan('michaeldmoore-annunciator-panel-postfix', this.panel.Postfix.FontSize, '', this.panel.Postfix.Text, false);
 
-                        html1 += "</div>";
+                        html += "</div>";
 
-                        return html1;
+                        return html;
                     }
                 }, {
                     key: 'buildLimitsHtml',
                     value: function buildLimitsHtml() {
-                        var html0 = '';
+                        var html = '';
 
                         if (this.panel.UpperLimit.DisplayOption != 'disabled' || this.panel.LowerLimit.DisplayOption != 'disabled') {
-                            html0 += "<div class='michaeldmoore-annunciator-panel-limits-container'>";
+                            html += "<div class='michaeldmoore-annunciator-panel-limits-container'>";
 
-                            if (this.panel.LowerLimit.DisplayOption != 'disabled') html0 += this.getValueSpan('michaeldmoore-annunciator-panel-lower-limit', this.panel.LowerLimit.FontSize, this.panel.LowerLimit.Value, "LowerLimit");
+                            if (this.panel.LowerLimit.DisplayOption != 'disabled' && this.panel.LowerLimit.FontSize != 'hide') html += this.getValueSpan('michaeldmoore-annunciator-panel-lower-limit', this.panel.LowerLimit.FontSize, this.panel.LowerLimit.Decimals, this.panel.LowerLimit.Value, "LowerLimit");
 
-                            if (this.panel.UpperLimit.DisplayOption != 'disabled') html0 += this.getValueSpan('michaeldmoore-annunciator-panel-upper-limit', this.panel.UpperLimit.FontSize, this.panel.UpperLimit.Value, "UpperLimit");
+                            if (this.panel.UpperLimit.DisplayOption != 'disabled' && this.panel.UpperLimit.FontSize != 'hide') html += this.getValueSpan('michaeldmoore-annunciator-panel-upper-limit', this.panel.UpperLimit.FontSize, this.panel.UpperLimit.Decimals, this.panel.UpperLimit.Value, "UpperLimit");
 
-                            html0 += "</div>";
+                            html += "</div>";
 
-                            html0 += "<div style='float:none;'/>";
+                            html += "<div style='float:none;'/>";
                         }
-                        return html0;
+                        return html;
                     }
                 }, {
                     key: 'buildHtml',
@@ -265,9 +271,11 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                         var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:" + this.ctrl.height + "px;'>";
 
                         if (this.data != null && this.data.value != null) {
-                            html += this.buildLimitsHtml();
-                            html += this.buildValueHtml();
-                        } else console.log("last data point is null...");
+                            if ($.isNumeric(this.data.value)) {
+                                html += this.buildLimitsHtml();
+                                html += this.buildValueHtml();
+                            } else this.alertSrv.set('Annunciator Data Warning', 'Last data point is non-numeric', 'warning', 5000);
+                        } else this.alertSrv.set('Annunciator Data Warning', 'Last data point is null', 'info', 1000);
 
                         html += "</div>";
 
@@ -294,28 +302,60 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                     }
                 }, {
                     key: 'getValueSpan',
-                    value: function getValueSpan(className, fontSize, value, metric) {
+                    value: function getValueSpan(className, fontSize, decimals, value, metric) {
                         var displayAttributes = this.getDisplayAttributesForValue(value, metric);
-                        return this.getTextSpan(className, fontSize, displayAttributes.color, this.formatValue(value), displayAttributes.flash);
+                        return this.getTextSpan(className, fontSize, displayAttributes.color, this.formatValue(value, decimals), displayAttributes.flash);
+                    }
+                }, {
+                    key: 'setOKValueRange',
+                    value: function setOKValueRange() {
+                        var OKLowerLimit;
+                        if (this.panel.LowerLimit.DisplayOption != 'disabled') {
+                            if ($.isNumeric(this.panel.LowerLimit.Value)) {
+                                if (this.panel.LowerWarning.DisplayOption != 'disabled') {
+                                    if ($.isNumeric(this.panel.LowerWarning.Value)) {
+                                        if (this.panel.LowerWarning.Value > this.panel.LowerLimit.Value) OKLowerLimit = this.panel.LowerWarning.Value;else this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value should be greater than LowerLimit Value', 'error', 5000);
+                                    } else this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value is non-numeric', 'error', 5000);
+                                } else OKLowerLimit = this.panel.LowerLimit.Value;
+                            } else {
+                                this.alertSrv.set('Annunciator Options Error', 'LowerLimit Value is non-numeric', 'error', 5000);
+                            }
+                        }
+
+                        var OKUpperLimit;
+                        if (this.panel.UpperLimit.DisplayOption != 'disabled') {
+                            if ($.isNumeric(this.panel.UpperLimit.Value)) {
+                                if (this.panel.UpperWarning.DisplayOption != 'disabled') {
+                                    if ($.isNumeric(this.panel.UpperWarning.Value)) {
+                                        if (this.panel.UpperWarning.Value < this.panel.UpperLimit.Value) OKUpperLimit = this.panel.UpperWarning.Value;else this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value should be less than UpperLimit Value', 'error', 5000);
+                                    } else this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value is non-numeric', 'error', 5000);
+                                } else OKUpperLimit = this.panel.UpperLimit.Value;
+                            } else {
+                                this.alertSrv.set('Annunciator Options Error', 'UpperLimit Value is non-numeric', 'error', 5000);
+                            }
+                        }
+
+                        if ($.isNumeric(OKLowerLimit) && $.isNumeric(OKUpperLimit)) this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;else if ($.isNumeric(OKLowerLimit)) this.panel.MetricValueRange = '> ' + OKLowerLimit;else if ($.isNumeric(OKUpperLimit)) this.panel.MetricValueRange = '< ' + OKUpperLimit;else this.panel.MetricValueRange = '';
                     }
                 }, {
                     key: 'onRender',
                     value: function onRender() {
                         this.buildHtml();
+                        this.setOKValueRange();
                         this.ctrl.renderingCompleted();
                     }
                 }, {
                     key: 'onDataReceived',
                     value: function onDataReceived(dataList) {
-                        //console.log("Annunciator::onDataReceived()");
                         var data = {};
-                        var dataPoints = dataList[0].datapoints;
-                        if (dataPoints.length < 2) {
-                            console.log("No data", dataPoints);
-                        } else {
-                            this.series = dataList.map(this.seriesHandler.bind(this));
-                            this.setValues(data);
-                            //this.value = dataPoints[0][0];
+                        if (dataList.length > 0) {
+                            var dataPoints = dataList[0].datapoints;
+                            if (dataPoints.length < 2) {
+                                this.alertSrv.set('Annunciator Data Error', 'No data', 'error', 5000);
+                            } else {
+                                this.series = dataList.map(this.seriesHandler.bind(this));
+                                this.setValues(data);
+                            }
                         }
                         this.data = data;
                         this.render();
@@ -333,10 +373,10 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                     }
                 }, {
                     key: 'getDecimalsForValue',
-                    value: function getDecimalsForValue(value) {
-                        if (_.isNumber(this.panel.decimals)) {
+                    value: function getDecimalsForValue(value, decimals) {
+                        if (_.isNumber(decimals)) {
                             return {
-                                decimals: this.panel.decimals,
+                                decimals: decimals,
                                 scaledDecimals: null
                             };
                         }
@@ -379,29 +419,31 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                     }
                 }, {
                     key: 'formatValue',
-                    value: function formatValue(value) {
-                        var decimalInfo = this.getDecimalsForValue(value);
-                        var formatFunc = kbn.valueFormats[this.panel.format];
+                    value: function formatValue(value, decimals) {
+                        // crude work-around for kbn formatting function error - preserve decimal places even for whole numbers
+                        if (value == 0 && decimals > 0) value += 0.000000000000001;
+                        var decimalInfo = this.getDecimalsForValue(value, decimals);
+                        var formatFunc = kbn.valueFormats[this.panel.Metric.Format];
                         return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
                     }
                 }, {
                     key: 'setValues',
                     value: function setValues(data) {
-                        //console.log("Annunciator::setValues()");
                         data.flotpairs = [];
 
                         if (this.series.length > 1) {
-                            var error = new Error();
-                            error.message = 'Multiple Series Error';
-                            error.data = 'Metric query returns ' + this.series.length + ' series. Single Stat Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series);
-                            throw error;
+                            this.alertSrv.set('Annunciator Multiple Series Error', 'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series), 'error', 10000);
+                            //var error = new Error();
+                            //error.message = 'Multiple Series Error';
+                            //error.data = 'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series);
+                            //throw error;			
                         }
 
                         if (this.series && this.series.length > 0) {
                             var lastPoint = _.last(this.series[0].datapoints);
                             var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
 
-                            if (this.panel.valueName === 'name') {
+                            if (this.panel.Metric.Name === 'name') {
                                 data.value = 0;
                                 data.valueRounded = 0;
                                 data.valueFormatted = this.series[0].alias;
@@ -410,15 +452,15 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                                 data.valueFormatted = _.escape(lastValue);
                                 data.valueRounded = 0;
                             } else {
-                                data.value = this.series[0].stats[this.panel.valueName];
+                                data.value = this.series[0].stats[this.panel.Metric.Name];
                                 data.flotpairs = this.series[0].flotpairs;
 
                                 if (data == null || data.value == null) {
                                     data.value = 0.0;
                                 }
 
-                                var decimalInfo = this.getDecimalsForValue(data.value);
-                                var formatFunc = kbn.valueFormats[this.panel.format];
+                                var decimalInfo = this.getDecimalsForValue(data.value, this.panel.Metric.Decimals);
+                                var formatFunc = kbn.valueFormats[this.panel.Metric.Format];
                                 data.valueFormatted = formatFunc(data.value, decimalInfo.decimals, decimalInfo.scaledDecimals);
                                 data.valueRounded = kbn.roundValue(data.value, decimalInfo.decimals);
                             }
@@ -499,8 +541,6 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                             color: this.panel.sparkline.lineColor
                         };
 
-                        //console.log("annunciator::addSparkline() - " + this.data.flotpairs.length + " flotpairs");
-
                         $.plot(plotCanvas, [plotSeries], options);
                     }
                 }, {
@@ -512,10 +552,7 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'a
                     key: 'link',
                     value: function link(scope, elem, attrs, ctrl) {
                         this.ctrl = ctrl;
-                        //this.$panelContainer = elem.find('.panel-container');
-                        //this.$panelsWrapper = elem.find('.panels-wrapper');
                         this.elem = elem.find('.panel-content');
-                        //console.log("Annunciator::link()");
                     }
                 }]);
 
