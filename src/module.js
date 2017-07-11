@@ -17,16 +17,16 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     /** @ngInject */
     constructor($scope, $injector, alertSrv) {
         super($scope, $injector);
-		
-		this.alertSrv = alertSrv;
+
+        this.alertSrv = alertSrv;
 
         var panelDefaults = {
             "LowerLimit": {
                 "DisplayOption": "disabled",
                 "Color": "rgb(2, 17, 249)",
                 "Value": "20",
-				"Decimals": "1",
-                "FontSize": "100%"
+                "Decimals": "1",
+                "FontSize": "50%"
             },
             "LowerWarning": {
                 "DisplayOption": "disabled",
@@ -34,32 +34,32 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
                 "Value": "25"
             },
             "Metric": {
-				"Name": "current",
-				"Format": "percent",
+                "Name": "current",
+                "Format": "percent",
                 "Color": "rgb(2, 247, 2)",
-				"Decimals": "4",
+                "Decimals": "4",
                 "FontSize": "100%"
             },
             "UpperWarning": {
                 "DisplayOption": "disabled",
                 "Color": "rgb(247, 2, 2)",
-                "Value": "80"
+                "Value": "75"
             },
             "UpperLimit": {
                 "DisplayOption": "disabled",
                 "Color": "rgb(247, 90, 7)",
-                "Value": "75",
-				"Decimals": "2",
-                "FontSize": "100%"
+                "Value": "80",
+                "Decimals": "2",
+                "FontSize": "50%"
             },
             "Prefix": {
-				"Text": "",
-				"FontSize": "hide",
-			},
+                "Text": "",
+                "FontSize": "hide",
+            },
             "Postfix": {
-				"Text": "",
-				"FontSize": "hide",
-			},
+                "Text": "",
+                "FontSize": "hide",
+            },
             "sparkline": {
                 "fillColor": "rgba(19, 193, 91, 0.32)",
                 "full": false,
@@ -81,7 +81,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     onDataError(err) {
-		this.alertSrv.set('Annunciator Data Error', err, 'error', 5000);
+        this.alertSrv.set('Annunciator Data Error', err, 'error', 5000);
         this.seriesList = [];
         this.render([]);
     }
@@ -210,13 +210,14 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     buildHtml() {
         var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:" + this.ctrl.height + "px;'>";
 
-        if (this.data != null && this.data.value != null && $.isNumeric(this.data.value)) {
-            html += this.buildLimitsHtml();
-            html += this.buildValueHtml();
-        } else if ($.isNumeric(this.data.value))
-			this.alertSrv.set('Annunciator Data Warning', 'Last data point is null', 'info', 1000);
-		else
-			this.alertSrv.set('Annunciator Data Warning', 'Last data point is non-numeric', 'warning', 5000);
+        if (this.data != null && this.data.value != null) {
+            if ($.isNumeric(this.data.value)) {
+                html += this.buildLimitsHtml();
+                html += this.buildValueHtml();
+            } else
+                this.alertSrv.set('Annunciator Data Warning', 'Last data point is non-numeric', 'warning', 5000);
+        } else
+            this.alertSrv.set('Annunciator Data Warning', 'Last data point is null', 'info', 1000);
 
         html += "</div>";
 
@@ -246,76 +247,74 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     getValueSpan(className, fontSize, decimals, value, metric) {
-		var displayAttributes = this.getDisplayAttributesForValue(value, metric);
-		return this.getTextSpan(className, fontSize, displayAttributes.color, this.formatValue(value, decimals), displayAttributes.flash);
+        var displayAttributes = this.getDisplayAttributesForValue(value, metric);
+        return this.getTextSpan(className, fontSize, displayAttributes.color, this.formatValue(value, decimals), displayAttributes.flash);
     }
 
-	setOKValueRange() {
-		var OKLowerLimit;
-		if (this.panel.LowerLimit.DisplayOption != 'disabled') {
-			if ($.isNumeric(this.panel.LowerLimit.Value)) {
-				if (this.panel.LowerWarning.DisplayOption != 'disabled') {
-					if ($.isNumeric(this.panel.LowerWarning.Value))
-						if (this.panel.LowerWarning.Value > this.panel.LowerLimit.Value)
-							OKLowerLimit = this.panel.LowerWarning.Value;
-						else
-							this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value should be greater than LowerLimit Value', 'error', 5000);
-					else
-						this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value is non-numeric', 'error', 5000);
-				}
-				else
-					OKLowerLimit = this.panel.LowerLimit.Value;
-			}
-			else {
-				this.alertSrv.set('Annunciator Options Error', 'LowerLimit Value is non-numeric', 'error', 5000);
-			}
-		}
-		
-		var OKUpperLimit;
-		if (this.panel.UpperLimit.DisplayOption != 'disabled') {
-			if ($.isNumeric(this.panel.UpperLimit.Value)) {
-				if (this.panel.UpperWarning.DisplayOption != 'disabled') {
-					if ($.isNumeric(this.panel.UpperWarning.Value))
-						if (this.panel.UpperWarning.Value < this.panel.UpperLimit.Value)
-							OKUpperLimit = this.panel.UpperWarning.Value;
-						else
-							this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value should be less than UpperLimit Value', 'error', 5000);
-					else
-						this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value is non-numeric', 'error', 5000);
-				}
-				else
-					OKUpperLimit = this.panel.UpperLimit.Value;
-			}
-			else {
-				this.alertSrv.set('Annunciator Options Error', 'UpperLimit Value is non-numeric', 'error', 5000);
-			}
-		}
+    setOKValueRange() {
+        var OKLowerLimit;
+        if (this.panel.LowerLimit.DisplayOption != 'disabled') {
+            if ($.isNumeric(this.panel.LowerLimit.Value)) {
+                if (this.panel.LowerWarning.DisplayOption != 'disabled') {
+                    if ($.isNumeric(this.panel.LowerWarning.Value))
+                        if (this.panel.LowerWarning.Value > this.panel.LowerLimit.Value)
+                            OKLowerLimit = this.panel.LowerWarning.Value;
+                        else
+                            this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value should be greater than LowerLimit Value', 'error', 5000);
+                    else
+                        this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value is non-numeric', 'error', 5000);
+                } else
+                    OKLowerLimit = this.panel.LowerLimit.Value;
+            } else {
+                this.alertSrv.set('Annunciator Options Error', 'LowerLimit Value is non-numeric', 'error', 5000);
+            }
+        }
 
-		if ($.isNumeric(OKLowerLimit) && $.isNumeric(OKUpperLimit))
-			this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;
-		else if ($.isNumeric(OKLowerLimit))
-			this.panel.MetricValueRange = '> ' + OKLowerLimit;
-		else if ($.isNumeric(OKUpperLimit))
-			this.panel.MetricValueRange = '< ' + OKUpperLimit;
-		else
+        var OKUpperLimit;
+        if (this.panel.UpperLimit.DisplayOption != 'disabled') {
+            if ($.isNumeric(this.panel.UpperLimit.Value)) {
+                if (this.panel.UpperWarning.DisplayOption != 'disabled') {
+                    if ($.isNumeric(this.panel.UpperWarning.Value))
+                        if (this.panel.UpperWarning.Value < this.panel.UpperLimit.Value)
+                            OKUpperLimit = this.panel.UpperWarning.Value;
+                        else
+                            this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value should be less than UpperLimit Value', 'error', 5000);
+                    else
+                        this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value is non-numeric', 'error', 5000);
+                } else
+                    OKUpperLimit = this.panel.UpperLimit.Value;
+            } else {
+                this.alertSrv.set('Annunciator Options Error', 'UpperLimit Value is non-numeric', 'error', 5000);
+            }
+        }
+
+        if ($.isNumeric(OKLowerLimit) && $.isNumeric(OKUpperLimit))
+            this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;
+        else if ($.isNumeric(OKLowerLimit))
+            this.panel.MetricValueRange = '> ' + OKLowerLimit;
+        else if ($.isNumeric(OKUpperLimit))
+            this.panel.MetricValueRange = '< ' + OKUpperLimit;
+        else
             this.panel.MetricValueRange = '';
-	}
+    }
 
     onRender() {
         this.buildHtml();
-		this.setOKValueRange();
+        this.setOKValueRange();
         this.ctrl.renderingCompleted();
     }
 
 
     onDataReceived(dataList) {
         var data = {};
-        var dataPoints = dataList[0].datapoints;
-        if (dataPoints.length < 2) {
-			this.alertSrv.set('Annunciator Data Error', 'No data', 'error', 5000);
-        } else {
-            this.series = dataList.map(this.seriesHandler.bind(this));
-            this.setValues(data);
+        if (dataList.length > 0) {
+            var dataPoints = dataList[0].datapoints;
+            if (dataPoints.length < 2) {
+                this.alertSrv.set('Annunciator Data Error', 'No data', 'error', 5000);
+            } else {
+                this.series = dataList.map(this.seriesHandler.bind(this));
+                this.setValues(data);
+            }
         }
         this.data = data;
         this.render();
@@ -376,9 +375,9 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     formatValue(value, decimals) {
-		// crude work-around for kbn formatting function error - preserve decimal places even for whole numbers
-		if (value == 0 && decimals > 0)
-			value += 0.000000000000001;
+        // crude work-around for kbn formatting function error - preserve decimal places even for whole numbers
+        if (value == 0 && decimals > 0)
+            value += 0.000000000000001;
         var decimalInfo = this.getDecimalsForValue(value, decimals);
         var formatFunc = kbn.valueFormats[this.panel.Metric.Format];
         return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
@@ -388,8 +387,8 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         data.flotpairs = [];
 
         if (this.series.length > 1) {
-			this.alertSrv.set('Annunciator Multiple Series Error', 
-				'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series), 'error', 10000);
+            this.alertSrv.set('Annunciator Multiple Series Error',
+                'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series), 'error', 10000);
             //var error = new Error();
             //error.message = 'Multiple Series Error';
             //error.data = 'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series);
