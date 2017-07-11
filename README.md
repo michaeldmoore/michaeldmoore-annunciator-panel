@@ -20,7 +20,7 @@
 **Configuration details:**
 >The Options tab is made of three groups, **Value**, **Thresholds** and **Spark Lines**.
 
->The **Value group** has a setting for the Metric - that is, the scalar operation applied to the data series.  Most commonly, this will be the default 'Current' value.
+The **Value group** has a setting for the Metric - that is, the scalar operation applied to the data series.  Most commonly, this will be the default 'Current' value.
 
 ![Values-MetricNames](https://raw.githubusercontent.com/michaeldmoore/michaeldmoore-annunciator-panel/master/src/img/Values-MetricNames.png)
 
