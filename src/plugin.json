@@ -21,8 +21,8 @@
       { "name": "MIT License", "url": "https://github.com/michaeldmoore/michaeldmoore-annunciator-panel/LICENSE" }
     ],
     "screenshots": [
-      { "name": "Showcase", "path": "img/showcase.png" },
-      { "name": "Options", "path": "img/options.png" }
+      { "name": "Showcase", "path": "img/Showcase.gif" },
+      { "name": "Options", "path": "img/Options.png" }
     ],
   },
   "dependencies": {
