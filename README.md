@@ -68,6 +68,6 @@ With the full set of thresholds enabled, all the settings are now exposed.
 
 
 
-The **Spark Lines **group is preserved unchanged from the original SingleStat panel.  See the SingleStat documentation for configuration details pertaining to this feature.
+The **Spark Lines group** is preserved unchanged from the original SingleStat panel.  See the SingleStat documentation for configuration details pertaining to this feature.
 
 ![Options](https://raw.githubusercontent.com/michaeldmoore/michaeldmoore-annunciator-panel/master/src/img/SparkLines.png)
