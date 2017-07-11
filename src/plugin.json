@@ -10,8 +10,8 @@
       "url": "https://github.com/michaeldmoore"
     },
     "keywords": ["annunciator", "singlestat", "panel"],
-    "version": "1.0.0",
-    "updated": "2017-06-17",
+    "version": "1.0.1",
+    "updated": "2017-07-10",
     "logos": {
       "small": "img/michaeldmoore-annunciator-panel.svg",
       "large": "img/michaeldmoore-annunciator-panel.svg"
