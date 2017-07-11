@@ -15,7 +15,7 @@
     "logos": {
       "small": "img/michaeldmoore-annunciator-panel.svg",
       "large": "img/michaeldmoore-annunciator-panel.svg"
-    }
+    },
     "links": [
       { "name": "Project site", "url": "https://github.com/michaeldmoore/michaeldmoore-annunciator-panel" },
       { "name": "MIT License", "url": "https://github.com/michaeldmoore/michaeldmoore-annunciator-panel/LICENSE" }
