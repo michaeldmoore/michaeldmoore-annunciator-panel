@@ -4,7 +4,7 @@
   "id": "michaeldmoore-annunciator-panel",
 
   "info": {
-    "description": "Enhanced versin of built-in SingleStat panel, with specialized display of thresholds and value-sensative presentation",
+    "description": "Enhanced version of built-in SingleStat panel, with specialized display of thresholds and value-sensative presentation",
     "author": {
       "name": "Michael Moore<mdmoore@gmail.com>",
       "url": "https://github.com/michaeldmoore"
