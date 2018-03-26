@@ -85,32 +85,32 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                         "LowerLimit": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(2, 17, 249)",
-                            "Value": "20",
-                            "Decimals": "1",
+                            "Value": 20,
+                            "Decimals": 1,
                             "FontSize": "50%"
                         },
                         "LowerWarning": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(9, 115, 102)",
-                            "Value": "25"
+                            "Value": 25
                         },
                         "Metric": {
                             "Name": "current",
                             "Format": "percent",
                             "Color": "rgb(2, 247, 2)",
-                            "Decimals": "4",
+                            "Decimals": 4,
                             "FontSize": "100%"
                         },
                         "UpperWarning": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(247, 2, 2)",
-                            "Value": "75"
+                            "Value": 75
                         },
                         "UpperLimit": {
                             "DisplayOption": "disabled",
                             "Color": "rgb(247, 90, 7)",
-                            "Value": "80",
-                            "Decimals": "2",
+                            "Value": 80,
+                            "Decimals": 2,
                             "FontSize": "50%"
                         },
                         "Prefix": {
@@ -421,7 +421,8 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                     key: 'formatValue',
                     value: function formatValue(value, decimals) {
                         // crude work-around for kbn formatting function error - preserve decimal places even for whole numbers
-                        if (value == 0 && decimals > 0) value += 0.000000000000001;
+                        //if (value == 0 && decimals > 0)
+                        //    value += 0.000000000000001;
                         var decimalInfo = this.getDecimalsForValue(value, decimals);
                         var formatFunc = kbn.valueFormats[this.panel.Metric.Format];
                         return formatFunc(value, decimalInfo.decimals, decimalInfo.scaledDecimals);
