@@ -6,16 +6,24 @@
   "info": {
     "description": "Enhanced version of built-in SingleStat panel, with specialized display of thresholds and value-sensative presentation",
     "author": {
-      "name": "Michael Moore",
-      "url": "https://michaelmoore.org"
+      "name": "Michael Moore<mdmoore@gmail.com>",
+      "url": "https://github.com/michaeldmoore"
     },
     "keywords": ["annunciator", "singlestat", "panel"],
-    "version": "1.0.0",
-    "updated": "2017-06-17",
+    "version": "1.0.2",
+    "updated": "2019-04-21",
     "logos": {
       "small": "img/michaeldmoore-annunciator-panel.svg",
       "large": "img/michaeldmoore-annunciator-panel.svg"
-    }
+    },
+    "links": [
+      { "name": "Project site", "url": "https://github.com/michaeldmoore/michaeldmoore-annunciator-panel" },
+      { "name": "MIT License", "url": "https://github.com/michaeldmoore/michaeldmoore-annunciator-panel/LICENSE" }
+    ],
+    "screenshots": [
+      { "name": "Showcase", "path": "img/Showcase.gif" },
+      { "name": "Options", "path": "img/Options.png" }
+    ],
   },
   "dependencies": {
     "grafanaVersion": "3.x.x",

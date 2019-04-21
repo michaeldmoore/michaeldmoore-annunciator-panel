@@ -268,7 +268,8 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                 }, {
                     key: 'buildHtml',
                     value: function buildHtml() {
-                        var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:" + this.ctrl.height + "px;'>";
+                        //var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:" + this.ctrl.height + "px;'>";
+                        var html = "<div class='michaeldmoore-annunciator-panel-container'>";
 
                         if (this.data != null && this.data.value != null) {
                             if ($.isNumeric(this.data.value)) {
@@ -471,10 +472,10 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                             }
 
                             // Add $__name variable for using in prefix or postfix
-                            data.scopedVars = _.extend({}, this.panel.scopedVars);
-                            data.scopedVars["__name"] = {
-                                value: this.series[0].label
-                            };
+                            //data.scopedVars = _.extend({}, this.panel.scopedVars);
+                            //data.scopedVars["__name"] = {
+                            //    value: this.series[0].label
+                            //};
                         }
                     }
                 }, {
@@ -488,7 +489,8 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                         }
 
                         var width = this.elem.width() + 20;
-                        var height = this.ctrl.height;
+                        //var height = this.ctrl.height;
+                        var height = this.elem.height();
                         var plotCanvas = $('<div></div>');
                         var plotCss = {};
                         plotCss.position = 'absolute';
