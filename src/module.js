@@ -69,7 +69,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
             }
         };
 
-        var panel = {};
+		var panel = {};
         var elem = {};
         var ctrl = {};
 
@@ -88,7 +88,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     onInitEditMode() {
-        this.metricNames = ['min', 'max', 'avg', 'current', 'total', 'name', 'first', 'delta', 'diff', 'range'];
+        this.metricNames = ['min', 'max', 'avg', 'current', 'total', 'first', 'delta', 'diff', 'range'];
         this.fontSizes = ['20%', '30%', '50%', '70%', '80%', '100%', '110%', '120%', '150%', '170%', '200%'];
         this.fontSizes0 = ['hide'].concat(this.fontSizes);
         this.displayStates = ['disabled', 'static', 'flash'];
@@ -209,9 +209,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     buildHtml() {
-        //var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:" + this.ctrl.height + "px;'>";
-        var html = "<div class='michaeldmoore-annunciator-panel-container'>";
-
+        var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:100%;'>";
         if (this.data != null && this.data.value != null) {
             if ($.isNumeric(this.data.value)) {
                 html += this.buildLimitsHtml();
@@ -259,16 +257,19 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
             if ($.isNumeric(this.panel.LowerLimit.Value)) {
                 if (this.panel.LowerWarning.DisplayOption != 'disabled') {
                     if ($.isNumeric(this.panel.LowerWarning.Value))
-                        if (this.panel.LowerWarning.Value > this.panel.LowerLimit.Value)
+                        if (Number(this.panel.LowerWarning.Value) > Number(this.panel.LowerLimit.Value))
                             OKLowerLimit = this.panel.LowerWarning.Value;
                         else
-                            this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value should be greater than LowerLimit Value', 'error', 5000);
+							console.log('LowerWarning Value should be greater than LowerLimit Value');
+                            //this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value should be greater than LowerLimit Value', 'error', 5000);
                     else
-                        this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value is non-numeric', 'error', 5000);
+						console.log('LowerWarning Value is non-numeric');
+                        //this.alertSrv.set('Annunciator Options Error', 'LowerWarning Value is non-numeric', 'error', 5000);
                 } else
                     OKLowerLimit = this.panel.LowerLimit.Value;
             } else {
-                this.alertSrv.set('Annunciator Options Error', 'LowerLimit Value is non-numeric', 'error', 5000);
+				console.log('LowerLimit Value is non-numeric');
+                //this.alertSrv.set('Annunciator Options Error', 'LowerLimit Value is non-numeric', 'error', 5000);
             }
         }
 
@@ -277,16 +278,19 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
             if ($.isNumeric(this.panel.UpperLimit.Value)) {
                 if (this.panel.UpperWarning.DisplayOption != 'disabled') {
                     if ($.isNumeric(this.panel.UpperWarning.Value))
-                        if (this.panel.UpperWarning.Value < this.panel.UpperLimit.Value)
+                        if (Number(this.panel.UpperWarning.Value) < Number(this.panel.UpperLimit.Value))
                             OKUpperLimit = this.panel.UpperWarning.Value;
                         else
-                            this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value should be less than UpperLimit Value', 'error', 5000);
+							console.log('UpperWarning Value should be less than UpperLimit Value');
+                            //this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value should be less than UpperLimit Value', 'error', 5000);
                     else
-                        this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value is non-numeric', 'error', 5000);
+						console.log('UpperWarning Value is non-numeric');
+                        //this.alertSrv.set('Annunciator Options Error', 'UpperWarning Value is non-numeric', 'error', 5000);
                 } else
                     OKUpperLimit = this.panel.UpperLimit.Value;
             } else {
-                this.alertSrv.set('Annunciator Options Error', 'UpperLimit Value is non-numeric', 'error', 5000);
+				console.log('UpperLimit Value is non-numeric');
+                //this.alertSrv.set('Annunciator Options Error', 'UpperLimit Value is non-numeric', 'error', 5000);
             }
         }
 
@@ -401,15 +405,13 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
             var lastPoint = _.last(this.series[0].datapoints);
             var lastValue = _.isArray(lastPoint) ? lastPoint[0] : null;
 
-            if (this.panel.Metric.Name === 'name') {
-                data.value = 0;
-                data.valueRounded = 0;
-                data.valueFormatted = this.series[0].alias;
-            } else if (_.isString(lastValue)) {
+			console.log("this.panel.Metric.Name='"+this.panel.Metric.Name+"'");
+			
+            if (_.isString(lastValue)) {
                 data.value = 0;
                 data.valueFormatted = _.escape(lastValue);
                 data.valueRounded = 0;
-            } else {
+			} else {
                 data.value = this.series[0].stats[this.panel.Metric.Name];
                 data.flotpairs = this.series[0].flotpairs;
 
@@ -444,7 +446,6 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         }
 
         var width = this.elem.width() + 20;
-        //var height = this.ctrl.height;
         var height = this.elem.height();
         var plotCanvas = $('<div></div>');
         var plotCss = {};

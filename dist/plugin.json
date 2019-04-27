@@ -23,7 +23,7 @@
     "screenshots": [
       { "name": "Showcase", "path": "img/Showcase.gif" },
       { "name": "Options", "path": "img/Options.png" }
-    ],
+    ]
   },
   "dependencies": {
     "grafanaVersion": "3.x.x",

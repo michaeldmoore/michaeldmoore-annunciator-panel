@@ -83,11 +83,10 @@
 }
 
 .michaeldmoore-annunciator-flash {
-  animation: michaeldmoore-annunciator-flash 1s infinite;
+  animation: michaeldmoore-annunciator-flash 0.5s infinite;
 }
 
 @keyframes michaeldmoore-annunciator-flash {
-  0% { font-weight: bold; }
-  50% { font-weight: normal; }
-  100% { font-weight: bold; } 
+  0% { font-weight: 100; }
+  100% { font-weight: 900; } 
 }
