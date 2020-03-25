@@ -36,21 +36,21 @@
         <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.Postfix.FontSize" ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()"></select>
       </div>
     </div>
-	
+
 	<div class="gf-form">
 	  <label class="gf-form-label michaeldmoore-annunciator-panel-w6">Unit</label>
 	  <div class="gf-form-dropdown-typeahead michaeldmoore-annunciator-panel-w19" ng-model="ctrl.panel.Metric.Format" dropdown-typeahead2="ctrl.unitFormats" dropdown-typeahead-on-select="ctrl.setUnitFormat($subItem)">
 	  </div>
 	</div>
   </div>
-	
+
   <div class="section gf-form-group">
     <h5 class="section-heading">Thresholds</h5>
 	<div class="gf-form">
       <div class="gf-form-inline">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9" style="background-color: transparent;"/>
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Display Option</label>
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w4">Color</label>
+        <label class="gf-form-label">Col</label>
         <div class="gf-form-inline" ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled' || ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
           <label class="gf-form-label michaeldmoore-annunciator-panel-w6">Value</label>
 		</div>
@@ -62,13 +62,13 @@
 	<div class="gf-form">
       <div class="gf-form-inline">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Limit</label>
-	  </div>	
+	  </div>
       <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
         <select class="gf-form-input" ng-model="ctrl.panel.UpperLimit.DisplayOption" ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
       </div>
 	  <div class="gf-form-inline" ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled'">
         <div class="gf-form-inline">
-		  <span class="gf-form-label michaeldmoore-annunciator-panel-w4">
+		  <span class="gf-form-label">
             <spectrum-picker ng-model="ctrl.panel.UpperLimit.Color" ng-change="ctrl.render()" ></spectrum-picker>
           </span>
 	    </div>
@@ -79,19 +79,19 @@
         <div class="gf-form-select-wrapper">
           <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.UpperLimit.FontSize" ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()"/>
         </div>
-	  </div>	
+	  </div>
 	</div>
 
 	<div class="gf-form" ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled'">
       <div class="gf-form-inline">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Warning</label>
-	  </div>	
+	  </div>
       <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
         <select class="gf-form-input" ng-model="ctrl.panel.UpperWarning.DisplayOption" ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
       </div>
 	  <div class="gf-form-inline" ng-if="ctrl.panel.UpperWarning.DisplayOption != 'disabled'">
         <div class="gf-form-inline">
-		  <span class="gf-form-label michaeldmoore-annunciator-panel-w4">
+		  <span class="gf-form-label">
             <spectrum-picker ng-model="ctrl.panel.UpperWarning.Color" ng-change="ctrl.render()" ></spectrum-picker>
           </span>
 	    </div>
@@ -105,7 +105,7 @@
       <label class="gf-form-label michaeldmoore-annunciator-panel-w9">OK</label>
       <label class="gf-form-label michaeldmoore-annunciator-panel-w9" style="font-size: 1rem;">static</label>
       <div class="gf-form-inline">
-        <span class="gf-form-label michaeldmoore-annunciator-panel-w4">
+        <span class="gf-form-label">
           <spectrum-picker ng-model="ctrl.panel.Metric.Color" ng-change="ctrl.render()" ></spectrum-picker>
         </span>
 	  </div>
@@ -121,13 +121,13 @@
 	<div class="gf-form" ng-if="ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
       <div class="gf-form-inline">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Warning</label>
-	  </div>	
+	  </div>
       <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
         <select class="gf-form-input" ng-model="ctrl.panel.LowerWarning.DisplayOption" ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
       </div>
 	  <div class="gf-form-inline" ng-if="ctrl.panel.LowerWarning.DisplayOption != 'disabled'">
         <div class="gf-form-inline">
-		  <span class="gf-form-label michaeldmoore-annunciator-panel-w4">
+		  <span class="gf-form-label">
             <spectrum-picker ng-model="ctrl.panel.LowerWarning.Color" ng-change="ctrl.render()" ></spectrum-picker>
           </span>
 	    </div>
@@ -140,13 +140,13 @@
 	<div class="gf-form">
       <div class="gf-form-inline">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Limit</label>
-	  </div>	
+	  </div>
       <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
         <select class="gf-form-input" ng-model="ctrl.panel.LowerLimit.DisplayOption" ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
       </div>
 	  <div class="gf-form-inline" ng-if="ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
         <div class="gf-form-inline">
-		  <span class="gf-form-label michaeldmoore-annunciator-panel-w4">
+		  <span class="gf-form-label">
             <spectrum-picker ng-model="ctrl.panel.LowerLimit.Color" ng-change="ctrl.render()" ></spectrum-picker>
           </span>
 	    </div>
@@ -157,11 +157,11 @@
         <div class="gf-form-select-wrapper">
           <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.LowerLimit.FontSize" ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()"/>
         </div>
-	  </div>	
+	  </div>
 	</div>
 
   </div>
-  
+
   <div class="section gf-form-group">
     <h5 class="section-heading">Spark lines</h5>
     <gf-form-switch class="gf-form" label-class="width-9" label="Show" checked="ctrl.panel.sparkline.show" on-change="ctrl.render()"></gf-form-switch>
@@ -181,6 +181,6 @@
       </div>
     </div>
   </div>
-  
-  
+
+
 </div>

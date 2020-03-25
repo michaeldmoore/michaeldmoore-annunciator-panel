@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+/*jshint -W087 */
 import {
     MetricsPanelCtrl
 } from 'app/plugins/sdk';
@@ -149,12 +150,12 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
                 color = this.panel.UpperLimit.Color;
                 break;
 
-                //case "UpperWarning": 
-                //color = this.panel.UpperWarning.Color; 
+                //case "UpperWarning":
+                //color = this.panel.UpperWarning.Color;
                 //break;
 
                 //case "LowerWarning":
-                //color = this.panel.LowerWarning.Color; 
+                //color = this.panel.LowerWarning.Color;
                 //break;
 
             case "LowerLimit":
@@ -386,7 +387,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         data.flotpairs = [];
 
         if (this.series.length > 1) {
-			appEvents.emit('alert-error', ['Annunciator Multiple Series Error', 
+			appEvents.emit('alert-error', ['Annunciator Multiple Series Error',
 				'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series)]);
         }
 
@@ -496,8 +497,13 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
 
     link(scope, elem, attrs, ctrl) {
         this.ctrl = ctrl;
-        this.elem = elem.find('.panel-content');
-    }
+        this.elem = elem;
+
+        // for backward compatability (grafana 6.6.0 and earlier)
+        var panelContentElem = elem.find('.panel-content');
+        if (panelContentElem.length)
+            this.elem = panelContentElem;
+}
 }
 
 AnnunciatorPanelCtrl.templateUrl = 'module.html';

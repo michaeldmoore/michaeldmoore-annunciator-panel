@@ -211,12 +211,12 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                                 color = this.panel.UpperLimit.Color;
                                 break;
 
-                            //case "UpperWarning": 
-                            //color = this.panel.UpperWarning.Color; 
+                            //case "UpperWarning":
+                            //color = this.panel.UpperWarning.Color;
                             //break;
 
                             //case "LowerWarning":
-                            //color = this.panel.LowerWarning.Color; 
+                            //color = this.panel.LowerWarning.Color;
                             //break;
 
                             case "LowerLimit":
@@ -544,7 +544,11 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                     key: 'link',
                     value: function link(scope, elem, attrs, ctrl) {
                         this.ctrl = ctrl;
-                        this.elem = elem.find('.panel-content');
+                        this.elem = elem;
+
+                        // for backward compatability (grafana 6.6.0 and earlier)
+                        var panelContentElem = elem.find('.panel-content');
+                        if (panelContentElem.length) this.elem = panelContentElem;
                     }
                 }]);
 

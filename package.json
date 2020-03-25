@@ -1,6 +1,6 @@
 {
   "name": "michaeldmoore-annunciator-panel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Annunciator panel for Grafana",
   "main": "README.md",
   "scripts": {
@@ -33,7 +33,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.9.0",
-    "grunt": "^1.0.4",
+    "grunt": "^1.1.0",
     "grunt-babel": "~6.0.0",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-copy": "~0.8.2",
@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "grunt-contrib-jshint": "^2.1.0",
-    "lodash": "^4.17.2"
+    "lodash": "^4.17.15"
   }
 }
