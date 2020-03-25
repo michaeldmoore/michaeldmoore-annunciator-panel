@@ -270,11 +270,10 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                     value: function buildHtml() {
                         var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:100%;'>";
                         if (this.data != null && this.data.value != null) {
-                            if ($.isNumeric(this.data.value)) {
-                                html += this.buildLimitsHtml();
-                                html += this.buildValueHtml();
-                            } else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
-                        } else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is null']);
+                            html += this.buildLimitsHtml();
+                            if ($.isNumeric(this.data.value)) html += this.buildValueHtml();else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
+                        } else html += '<div class="michaeldmoore-annunciator-panel-centered">Data outside time range</div>';
+                        //            appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is null']);
 
                         html += "</div>";
 
@@ -339,6 +338,20 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                 }, {
                     key: 'onRender',
                     value: function onRender() {
+                        var _this2 = this;
+
+                        var data = {};
+                        if (this.dataList.length > 0) {
+                            this.dataList[0].datapoints = this.dataPoints.filter(function (dp) {
+                                return dp[1] >= _this2.range.from && dp[1] <= _this2.range.to;
+                            });
+                            if (this.dataList[0].datapoints.length > 0) {
+                                this.series = this.dataList.map(this.seriesHandler.bind(this));
+                                this.setValues(data);
+                            }
+                        }
+                        this.data = data;
+
                         this.buildHtml();
                         this.setOKValueRange();
                         this.ctrl.renderingCompleted();
@@ -346,17 +359,13 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                 }, {
                     key: 'onDataReceived',
                     value: function onDataReceived(dataList) {
-                        var data = {};
+                        this.dataList = dataList;
                         if (dataList.length > 0) {
-                            var dataPoints = dataList[0].datapoints;
-                            if (dataPoints.length < 2) {
+                            this.dataPoints = dataList[0].datapoints;
+                            if (this.dataPoints.length < 2) {
                                 appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
-                            } else {
-                                this.series = dataList.map(this.seriesHandler.bind(this));
-                                this.setValues(data);
                             }
                         }
-                        this.data = data;
                         this.render();
                     }
                 }, {

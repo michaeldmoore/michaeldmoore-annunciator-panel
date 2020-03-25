@@ -4,6 +4,7 @@
   "description": "Annunciator panel for Grafana",
   "main": "README.md",
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "build": "grunt"
   },
   "author": "Michael Moore",
@@ -41,10 +42,14 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-execute": "~0.2.2",
     "grunt-systemjs-builder": "^0.2.5",
-    "load-grunt-tasks": "^4.0.0"
+    "load-grunt-tasks": "^4.0.0",
+    "micromatch": "^4.0.2"
   },
   "dependencies": {
     "grunt-contrib-jshint": "^2.1.0",
     "lodash": "^4.17.15"
+  },
+  "resolutions": {
+    "micromatch": "^4.0.2"
   }
 }

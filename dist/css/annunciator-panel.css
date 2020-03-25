@@ -26,6 +26,14 @@
   margin-bottom: 0px;
 }
 
+.michaeldmoore-annunciator-panel-centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
 .michaeldmoore-annunciator-panel-w9 {
   width: 8.75rem;
   height: 37px;
@@ -88,5 +96,5 @@
 
 @keyframes michaeldmoore-annunciator-flash {
   0% { font-weight: 100; }
-  100% { font-weight: 900; } 
+  100% { font-weight: 900; }
 }

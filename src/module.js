@@ -13,7 +13,9 @@ import angular from 'angular';
 import kbn from 'app/core/utils/kbn';
 import config from 'app/core/config';
 import TimeSeries from 'app/core/time_series2';
-import {appEvents} from 'app/core/core';
+import {
+    appEvents
+} from 'app/core/core';
 
 class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
 
@@ -69,7 +71,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
             }
         };
 
-		var panel = {};
+        var panel = {};
         var elem = {};
         var ctrl = {};
 
@@ -82,7 +84,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     onDataError(err) {
-		appEvents.emit('alert-error', ['Annunciator Data Error', err]);
+        appEvents.emit('alert-error', ['Annunciator Data Error', err]);
         this.seriesList = [];
         this.render([]);
     }
@@ -211,13 +213,14 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     buildHtml() {
         var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:100%;'>";
         if (this.data != null && this.data.value != null) {
-            if ($.isNumeric(this.data.value)) {
-                html += this.buildLimitsHtml();
+            html += this.buildLimitsHtml();
+            if ($.isNumeric(this.data.value))
                 html += this.buildValueHtml();
-            } else
-				appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
+            else
+                appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
         } else
-			appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is null']);
+            html += '<div class="michaeldmoore-annunciator-panel-centered">Data outside time range</div>';
+//            appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is null']);
 
         html += "</div>";
 
@@ -260,13 +263,13 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
                         if (Number(this.panel.LowerWarning.Value) > Number(this.panel.LowerLimit.Value))
                             OKLowerLimit = this.panel.LowerWarning.Value;
                         else
-							appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value should be greater than LowerLimit Value']);
+                            appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value should be greater than LowerLimit Value']);
                     else
-						appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value is non-numeric']);
+                        appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value is non-numeric']);
                 } else
                     OKLowerLimit = this.panel.LowerLimit.Value;
             } else {
-				appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerLimit Value is non-numeric']);
+                appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerLimit Value is non-numeric']);
             }
         }
 
@@ -278,13 +281,13 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
                         if (Number(this.panel.UpperWarning.Value) < Number(this.panel.UpperLimit.Value))
                             OKUpperLimit = this.panel.UpperWarning.Value;
                         else
-							appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value should be less than UpperLimit Value']);
+                            appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value should be less than UpperLimit Value']);
                     else
-						appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value is non-numeric']);
+                        appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value is non-numeric']);
                 } else
                     OKUpperLimit = this.panel.UpperLimit.Value;
             } else {
-				appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperLimit Value is non-numeric']);
+                appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperLimit Value is non-numeric']);
             }
         }
 
@@ -299,6 +302,16 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     onRender() {
+        var data = {};
+        if (this.dataList.length > 0) {
+            this.dataList[0].datapoints = this.dataPoints.filter(dp => dp[1] >= this.range.from && dp[1] <= this.range.to);
+            if (this.dataList[0].datapoints.length > 0) {
+                this.series = this.dataList.map(this.seriesHandler.bind(this));
+                this.setValues(data);
+            }
+        }
+        this.data = data;
+
         this.buildHtml();
         this.setOKValueRange();
         this.ctrl.renderingCompleted();
@@ -306,17 +319,13 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
 
 
     onDataReceived(dataList) {
-        var data = {};
+        this.dataList = dataList;
         if (dataList.length > 0) {
-            var dataPoints = dataList[0].datapoints;
-            if (dataPoints.length < 2) {
-				appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
-            } else {
-                this.series = dataList.map(this.seriesHandler.bind(this));
-                this.setValues(data);
+            this.dataPoints = dataList[0].datapoints;
+            if (this.dataPoints.length < 2) {
+                appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
             }
         }
-        this.data = data;
         this.render();
     }
 
@@ -387,8 +396,9 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         data.flotpairs = [];
 
         if (this.series.length > 1) {
-			appEvents.emit('alert-error', ['Annunciator Multiple Series Error',
-				'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series)]);
+            appEvents.emit('alert-error', ['Annunciator Multiple Series Error',
+                'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series)
+            ]);
         }
 
         if (this.series && this.series.length > 0) {
@@ -399,7 +409,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
                 data.value = 0;
                 data.valueFormatted = _.escape(lastValue);
                 data.valueRounded = 0;
-			} else {
+            } else {
                 data.value = this.series[0].stats[this.panel.Metric.Name];
                 data.flotpairs = this.series[0].flotpairs;
 
@@ -503,7 +513,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         var panelContentElem = elem.find('.panel-content');
         if (panelContentElem.length)
             this.elem = panelContentElem;
-}
+    }
 }
 
 AnnunciatorPanelCtrl.templateUrl = 'module.html';
