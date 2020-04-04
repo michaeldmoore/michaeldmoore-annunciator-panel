@@ -272,8 +272,7 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                         if (this.data != null && this.data.value != null) {
                             html += this.buildLimitsHtml();
                             if ($.isNumeric(this.data.value)) html += this.buildValueHtml();else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
-                        } else html += '<div class="michaeldmoore-annunciator-panel-centered">Data outside time range</div>';
-                        //            appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is null']);
+                        } else html += '<div class="michaeldmoore-annunciator-panel-centered">No data</div>';
 
                         html += "</div>";
 
@@ -350,6 +349,7 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                                 this.setValues(data);
                             }
                         }
+
                         this.data = data;
 
                         this.buildHtml();
@@ -362,9 +362,9 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
                         this.dataList = dataList;
                         if (dataList.length > 0) {
                             this.dataPoints = dataList[0].datapoints;
-                            if (this.dataPoints.length < 2) {
-                                appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
-                            }
+                            //            if (this.dataPoints.length < 2) {
+                            //                appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
+                            //            }
                         }
                         this.render();
                     }
