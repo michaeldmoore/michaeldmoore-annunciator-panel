@@ -1,6 +1,6 @@
 {
   "name": "michaeldmoore-annunciator-panel",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Annunciator panel for Grafana",
   "main": "README.md",
   "scripts": {
