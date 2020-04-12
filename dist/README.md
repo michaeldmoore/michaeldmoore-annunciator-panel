@@ -45,7 +45,7 @@ In the default configuration, both the upper and lower limits are disabled.  The
 
 Note the rows for both Upper and Lower limits are set to 'disabled'.
 
-Setting either or both of these to 'static', or 'flash' exposes more settings - the threshold value(s) for the limit(s) along with Color, number of decimal places and font size.  When limits are enabled, the corresponding warning thresholds also appear, here in the default 'disabled' state.
+Setting either or both of these to 'static', 'flash', or the new value - 'shock & awe' exposes yet more settings - the threshold value(s) for the limit(s) along with Color, number of decimal places and font size.  When limits are enabled, the corresponding warning thresholds also appear, here in the default 'disabled' state.
 
 ![Thresholds-UpperLimit](https://raw.githubusercontent.com/michaeldmoore/michaeldmoore-annunciator-panel/master/src/img/Thresholds-UpperLimit.png)
 
