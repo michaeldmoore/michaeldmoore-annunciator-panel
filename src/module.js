@@ -93,7 +93,8 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         this.metricNames = ['min', 'max', 'avg', 'current', 'total', 'first', 'delta', 'diff', 'range'];
         this.fontSizes = ['20%', '30%', '50%', '70%', '80%', '100%', '110%', '120%', '150%', '170%', '200%'];
         this.fontSizes0 = ['hide'].concat(this.fontSizes);
-        this.displayStates = ['disabled', 'static', 'flash'];
+        this.displayStates = ['disabled', 'static'];
+        this.displayStates1 = this.displayStates.concat(['flash', 'shock & awe']);
         this.unitFormats = kbn.getUnitFormats();
         this.addEditorTab('Options', 'public/plugins/michaeldmoore-annunciator-panel/options.html', 2);
     }
@@ -126,50 +127,52 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     getDisplayAttributesForValue(value, metric) {
         var displayAttributes = {};
         var color = this.panel.Metric.Color;
+        var displayOption = this.panel.Metric.DisplayOption;
         var flash = false;
 
         var valueRegion = this.getValueRegion(this.data.value);
         switch (valueRegion) {
             case "UpperLimit":
                 color = this.panel.UpperLimit.Color;
+                displayOption = this.panel.UpperLimit.DisplayOption;
                 break;
 
             case "UpperWarning":
                 color = this.panel.UpperWarning.Color;
+                displayOption = this.panel.UpperWarning.DisplayOption;
                 break;
 
             case "LowerWarning":
                 color = this.panel.LowerWarning.Color;
+                displayOption = this.panel.LowerWarning.DisplayOption;
                 break;
 
             case "LowerLimit":
                 color = this.panel.LowerLimit.Color;
+                displayOption = this.panel.LowerLimit.DisplayOption;
                 break;
         }
 
         switch (metric) {
             case "UpperLimit":
                 color = this.panel.UpperLimit.Color;
+                if (displayOption == "shock & awe")
+                    displayOption = "flash";
+                if (valueRegion != "UpperLimit")
+                    displayOption = "static";
                 break;
-
-                //case "UpperWarning":
-                //color = this.panel.UpperWarning.Color;
-                //break;
-
-                //case "LowerWarning":
-                //color = this.panel.LowerWarning.Color;
-                //break;
 
             case "LowerLimit":
                 color = this.panel.LowerLimit.Color;
+                if (displayOption == "shock & awe")
+                    displayOption = "flash";
+                if (valueRegion != "LowerLimit")
+                    displayOption = "static";
                 break;
         }
 
-        flash = ((valueRegion == "UpperLimit" && this.panel.UpperLimit.DisplayOption == "flash" && (metric == "Value" || metric == "UpperLimit")) ||
-            (valueRegion == "LowerLimit" && this.panel.LowerLimit.DisplayOption == "flash" && (metric == "Value" || metric == "LowerLimit")));
-
         displayAttributes.color = color;
-        displayAttributes.flash = flash;
+        displayAttributes.displayOption = displayOption;
 
         return displayAttributes;
     }
@@ -179,12 +182,12 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
 
         html += "<div class='michaeldmoore-annunciator-panel-value-container'>";
         if (this.panel.Prefix.Text != '' && this.panel.Prefix.FontSize != 'hide')
-            html += this.getTextSpan('michaeldmoore-annunciator-panel-prefix', this.panel.Prefix.FontSize, '', this.panel.Prefix.Text, false);
+            html += this.getTextSpan('michaeldmoore-annunciator-panel-prefix', this.panel.Prefix.FontSize, this.panel.Prefix.Text, {});
 
         html += this.getValueSpan('michaeldmoore-annunciator-panel-value', this.panel.Metric.FontSize, this.panel.Metric.Decimals, this.data.value, "Value");
 
         if (this.panel.Postfix.Text != '' && this.panel.Postfix.FontSize != 'hide')
-            html += this.getTextSpan('michaeldmoore-annunciator-panel-postfix', this.panel.Postfix.FontSize, '', this.panel.Postfix.Text, false);
+            html += this.getTextSpan('michaeldmoore-annunciator-panel-postfix', this.panel.Postfix.FontSize, this.panel.Postfix.Text, {});
 
         html += "</div>";
 
@@ -230,27 +233,27 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         }
     }
 
-    getTextSpan(className, fontSize, color, text, flash) {
+    getTextSpan(className, fontSize, text, displayAttributes) {
         var style = '';
 
         if (fontSize)
             style += "font-size:" + fontSize + ";";
 
-        if (color)
-            style += "color:" + color + ";";
+        if (displayAttributes && displayAttributes.color)
+            style += "color:" + displayAttributes.color + ";";
 
         if (style)
             style = ' style="' + style + '"';
 
-        if (flash)
-            className += " michaeldmoore-annunciator-flash";
+        if (displayAttributes && displayAttributes.displayOption)
+            className += " michaeldmoore-annunciator-" + displayAttributes.displayOption.replace(' & ', 'and');
 
         return '<span class="' + className + '"' + style + '>' + text + '</span>';
     }
 
     getValueSpan(className, fontSize, decimals, value, metric) {
         var displayAttributes = this.getDisplayAttributesForValue(value, metric);
-        return this.getTextSpan(className, fontSize, displayAttributes.color, this.formatValue(value, decimals), displayAttributes.flash);
+        return this.getTextSpan(className, fontSize, this.formatValue(value, decimals), displayAttributes);
     }
 
     setOKValueRange() {
@@ -322,9 +325,6 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
         this.dataList = dataList;
         if (dataList.length > 0) {
             this.dataPoints = dataList[0].datapoints;
-//            if (this.dataPoints.length < 2) {
-//                appEvents.emit('alert-error', ['Annunciator Data Error', 'No data']);
-//            }
         }
         this.render();
     }

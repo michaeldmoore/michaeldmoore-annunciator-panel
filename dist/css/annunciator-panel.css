@@ -95,6 +95,15 @@
 }
 
 @keyframes michaeldmoore-annunciator-flash {
-  0% { font-weight: 100; }
-  100% { font-weight: 900; }
+  0% { font-weight: 100}
+  100% { font-weight: 900}
+}
+
+.michaeldmoore-annunciator-shockandawe {
+  animation: michaeldmoore-annunciator-shockandawe 1.0s infinite;
+}
+
+@keyframes michaeldmoore-annunciator-shockandawe {
+  0% { font-size:1em;}
+  100% { font-size:4em;}
 }
