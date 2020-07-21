@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "grunt-contrib-jshint": "^2.1.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   },
   "resolutions": {
     "micromatch": "^4.0.2"
