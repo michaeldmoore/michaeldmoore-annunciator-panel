@@ -1,0 +1,37 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "community",
+  "signedByOrg": "michaeldmoore",
+  "signedByOrgName": "michaeldmoore",
+  "plugin": "michaeldmoore-annunciator-panel",
+  "version": "1.0.6",
+  "time": 1609505402236,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "CHANGELOG.md": "fdb9faaa1482d2092508b4baa003563408b170f90e9a0c85af77abd4530dfb7a",
+    "css\\annunciator-panel.css": "207a49f48cc5f050c23e024b7cc2830f0197a3e8766d4f73840fef67c75d7419",
+    "img\\michaeldmoore-annunciator-panel.svg": "bfba041854fd9c7cbae670581e495b1cbeaba466cdd960efaed0b8f763f88fa0",
+    "img\\Options.png": "6d5503a09f672db26d1697dd27bedeb03799bdb5c702a940e762dc148d4acec5",
+    "img\\Showcase.gif": "536f3cb09e287b59a38d61fe130c1568a016fb4e1a7dfb20e288efe641ccc08f",
+    "module.html": "deda78164a5ad386633ce905ef5b6d89d6e74ef98b8309902ce038f5fa489067",
+    "module.js": "a480784b440b1bb48fc922c7e6f331891f7788949845d851766416094c6eb1d4",
+    "module.js.map": "e30ea466fa5d5040e71f0e7dc787c3571c958b8bc4e1179351a92e5768cd509f",
+    "options.html": "c0a44e45d181ee161ee34b70b51c0d331850b668356fde855cf819158580a131",
+    "plugin.json": "eac5a99b7314879b3dfa08436c5637e80efc9f3cd01a91cda618b6b0e1ccb92b",
+    "README.md": "2c02277fd8e03418bb6f3439d6bf88cc66ef5d967d367951a7f4718b23481933"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.1
+Comment: https://openpgpjs.org
+
+wqEEARMKAAYFAl/vGnoACgkQfk0ManCIZueyPgIJAVSu0YsC97TmwPHSLBzx
+jbdLAkCi1R7OJPA1ah6w0G0JJGMxPV+rByVj8Af1DLDhVjtrO2VfEO+WqmZP
+TYcYL1yXAgMHPisF1H7pHLESijn3RccJB3E/D2AIrQvevjCZxyfVYfaU6gr+
+qDxfeI/X+D3pP84QxXFD0yCnqUTOYHoO59U1ZA==
+=Jw9/
+-----END PGP SIGNATURE-----
