@@ -48,6 +48,7 @@
   "dependencies": {
     "@grafana/data": "^7.3.7",
     "@grafana/runtime": "^7.3.7",
+    "@grafana/toolkit": "^7.3.7",
     "grunt-contrib-jshint": "^2.1.0",
     "lodash": "^4.17.19"
   },
