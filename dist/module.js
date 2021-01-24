@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'jquery', 'jquery.flot', 'angular', 'app/core/utils/kbn', 'app/core/config', 'app/core/time_series2', 'app/core/core'], function (_export, _context) {
+System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'jquery', 'jquery.flot', 'app/core/utils/kbn', 'app/core/time_series2', '@grafana/runtime', '@grafana/data'], function (_export, _context) {
   "use strict";
 
-  var MetricsPanelCtrl, _, $, angular, kbn, config, TimeSeries, appEvents, _createClass, AnnunciatorPanelCtrl;
+  var MetricsPanelCtrl, _, $, kbn, TimeSeries, getTemplateSrv, PanelEvents, _createClass, templateSrv, AnnunciatorPanelCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -35,6 +35,10 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   }
 
+  function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
   return {
     setters: [function (_appPluginsSdk) {
       MetricsPanelCtrl = _appPluginsSdk.MetricsPanelCtrl;
@@ -42,16 +46,14 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
       _ = _lodash.default;
     }, function (_jquery) {
       $ = _jquery.default;
-    }, function (_jqueryFlot) {}, function (_angular) {
-      angular = _angular.default;
-    }, function (_appCoreUtilsKbn) {
+    }, function (_jqueryFlot) {}, function (_appCoreUtilsKbn) {
       kbn = _appCoreUtilsKbn.default;
-    }, function (_appCoreConfig) {
-      config = _appCoreConfig.default;
     }, function (_appCoreTime_series) {
       TimeSeries = _appCoreTime_series.default;
-    }, function (_appCoreCore) {
-      appEvents = _appCoreCore.appEvents;
+    }, function (_grafanaRuntime) {
+      getTemplateSrv = _grafanaRuntime.getTemplateSrv;
+    }, function (_grafanaData) {
+      PanelEvents = _grafanaData.PanelEvents;
     }],
     execute: function () {
       _createClass = function () {
@@ -71,6 +73,8 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
           return Constructor;
         };
       }();
+
+      templateSrv = getTemplateSrv();
 
       _export('PanelCtrl', AnnunciatorPanelCtrl = function (_MetricsPanelCtrl) {
         _inherits(AnnunciatorPanelCtrl, _MetricsPanelCtrl);
@@ -129,31 +133,37 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
             }
           };
 
-          var panel = {};
-          var elem = {};
-          var ctrl = {};
-
           _.defaults(_this.panel, panelDefaults);
 
-          _this.events.on('render', _this.onRender.bind(_this));
-          _this.events.on('data-received', _this.onDataReceived.bind(_this));
-          _this.events.on('data-error', _this.onDataError.bind(_this));
-          _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
+          _this.events.on(PanelEvents.dataReceived, _this.onDataReceived.bind(_this), $scope);
+
+          _this.events.on(PanelEvents.dataError, _this.onDataError.bind(_this), $scope);
+
+          _this.events.on(PanelEvents.render, _this.onRender.bind(_this));
+
+          _this.events.on(PanelEvents.dataSnapshotLoad, _this.onDataSnapshotLoad.bind(_this));
+
+          _this.events.on(PanelEvents.editModeInitialized, _this.onInitEditMode.bind(_this));
           return _this;
         }
 
         _createClass(AnnunciatorPanelCtrl, [{
           key: 'onDataError',
           value: function onDataError(err) {
-            appEvents.emit('alert-error', ['Annunciator Data Error', err]);
+            this.errorMessage = 'Query Failure : ' + err.status + ', ' + err.statusText;
             this.seriesList = [];
             this.render([]);
+          }
+        }, {
+          key: 'onDataSnapshotLoad',
+          value: function onDataSnapshotLoad(snapshotData) {
+            this.onDataReceived(snapshotData);
           }
         }, {
           key: 'onInitEditMode',
           value: function onInitEditMode() {
             this.metricNames = ['min', 'max', 'avg', 'current', 'total', 'first', 'delta', 'diff', 'range'];
-            this.fontSizes = ['20%', '30%', '50%', '70%', '80%', '100%', '110%', '120%', '150%', '170%', '200%'];
+            this.fontSizes = ['20%', '30%', '50%', '70%', '80%', '100%', '110%', '120%', '150%', '170%', '200%', '230%', '260%', '300%', '340%', '380%', '440%', '500%', '600%', '800%', '1000%'];
             this.fontSizes0 = ['hide'].concat(this.fontSizes);
             this.displayStates = ['disabled', 'static'];
             this.displayStates1 = this.displayStates.concat(['flash', 'shock & awe']);
@@ -269,10 +279,15 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
           key: 'buildHtml',
           value: function buildHtml() {
             var html = "<div class='michaeldmoore-annunciator-panel-container' style='height:100%;'>";
-            if (this.data != null && this.data.value != null) {
+
+            if (this.data == null || this.data.value == null) this.errorMessage = 'No data';
+
+            if (this.errorMessage) {
+              html += '<div class="michaeldmoore-annunciator-panel-centered">' + this.errorMessage + '</div>';
+            } else {
               html += this.buildLimitsHtml();
-              if ($.isNumeric(this.data.value)) html += this.buildValueHtml();else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'Last data point is non-numeric']);
-            } else html += '<div class="michaeldmoore-annunciator-panel-centered">No data</div>';
+              if (isNumber(this.data.value)) html += this.buildValueHtml();
+            }
 
             html += "</div>";
 
@@ -308,31 +323,38 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
           value: function setOKValueRange() {
             var OKLowerLimit;
             if (this.panel.LowerLimit.DisplayOption != 'disabled') {
-              if ($.isNumeric(this.panel.LowerLimit.Value)) {
+              if (isNumber(this.panel.LowerLimit.Value)) {
                 if (this.panel.LowerWarning.DisplayOption != 'disabled') {
-                  if ($.isNumeric(this.panel.LowerWarning.Value)) {
-                    if (Number(this.panel.LowerWarning.Value) > Number(this.panel.LowerLimit.Value)) OKLowerLimit = this.panel.LowerWarning.Value;else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value should be greater than LowerLimit Value']);
-                  } else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerWarning Value is non-numeric']);
+                  if (isNumber(this.panel.LowerWarning.Value)) {
+                    if (Number(this.panel.LowerWarning.Value) > Number(this.panel.LowerLimit.Value)) OKLowerLimit = this.panel.LowerWarning.Value;else this.errorMessage = 'Warning : LowerWarning must be greater than LowerLimit';
+                  } else this.errorMessage = 'Warning : LowerWarning is non-numeric';
                 } else OKLowerLimit = this.panel.LowerLimit.Value;
               } else {
-                appEvents.emit('alert-warning', ['Annunciator Data Warning', 'LowerLimit Value is non-numeric']);
+                this.errorMessage = 'Warning : LowerLimit is non-numeric';
               }
             }
 
             var OKUpperLimit;
             if (this.panel.UpperLimit.DisplayOption != 'disabled') {
-              if ($.isNumeric(this.panel.UpperLimit.Value)) {
+              if (isNumber(this.panel.UpperLimit.Value)) {
                 if (this.panel.UpperWarning.DisplayOption != 'disabled') {
-                  if ($.isNumeric(this.panel.UpperWarning.Value)) {
-                    if (Number(this.panel.UpperWarning.Value) < Number(this.panel.UpperLimit.Value)) OKUpperLimit = this.panel.UpperWarning.Value;else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value should be less than UpperLimit Value']);
-                  } else appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperWarning Value is non-numeric']);
+                  if (isNumber(this.panel.UpperWarning.Value)) {
+                    if (Number(this.panel.UpperWarning.Value) < Number(this.panel.UpperLimit.Value)) OKUpperLimit = this.panel.UpperWarning.Value;else this.errorMessage = 'Warning : UpperWarning must be less than UpperLimit';
+                  } else this.errorMessage = 'Warning : UpperWarning is non-numeric';
                 } else OKUpperLimit = this.panel.UpperLimit.Value;
               } else {
-                appEvents.emit('alert-warning', ['Annunciator Data Warning', 'UpperLimit Value is non-numeric']);
+                this.errorMessage = 'Warning : UpperLimit is non-numeric';
               }
             }
 
-            if ($.isNumeric(OKLowerLimit) && $.isNumeric(OKUpperLimit)) this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;else if ($.isNumeric(OKLowerLimit)) this.panel.MetricValueRange = '> ' + OKLowerLimit;else if ($.isNumeric(OKUpperLimit)) this.panel.MetricValueRange = '< ' + OKUpperLimit;else this.panel.MetricValueRange = '';
+            if (isNumber(OKLowerLimit) && isNumber(OKUpperLimit)) {
+              if (OKUpperLimit > OKLowerLimit) {
+                this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;
+              } else {
+                this.errorMessage = 'Warning : UpperWarning/limit must be more than LowerWarning/Limit';
+                this.panel.MetricValueRange = '?????';
+              }
+            } else if (isNumber(OKLowerLimit)) this.panel.MetricValueRange = '> ' + OKLowerLimit;else if (isNumber(OKUpperLimit)) this.panel.MetricValueRange = '< ' + OKUpperLimit;else this.panel.MetricValueRange = '';
           }
         }, {
           key: 'onRender',
@@ -352,9 +374,10 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
 
             this.data = data;
 
-            this.buildHtml();
             this.setOKValueRange();
+            this.buildHtml();
             this.ctrl.renderingCompleted();
+            delete this.errorMessage;
           }
         }, {
           key: 'onDataReceived',
@@ -437,9 +460,9 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
           value: function setValues(data) {
             data.flotpairs = [];
 
-            if (this.series.length > 1) {
-              appEvents.emit('alert-error', ['Annunciator Multiple Series Error', 'Metric query returns ' + this.series.length + ' series. Annunciator Panel expects a single series.\n\nResponse:\n' + JSON.stringify(this.series)]);
-            }
+            //if (this.series.length > 1) {
+            //  this.errorMessage = 'Multiple Series Error : query returns ' + this.series.length + ' series. Panel expects a single series';
+            //}
 
             if (this.series && this.series.length > 0) {
               var lastPoint = _.last(this.series[0].datapoints);
@@ -466,12 +489,6 @@ System.register(['app/plugins/sdk', './css/annunciator-panel.css!', 'lodash', 'j
               if (data == null || data.value == null) {
                 data.value = 0.0;
               }
-
-              // Add $__name variable for using in prefix or postfix
-              //data.scopedVars = _.extend({}, this.panel.scopedVars);
-              //data.scopedVars["__name"] = {
-              //    value: this.series[0].label
-              //};
             }
           }
         }, {

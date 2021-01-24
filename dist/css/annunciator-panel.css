@@ -1,3 +1,10 @@
+.michaeldmoore-annunciator-panel-w3 {
+  width: 2.25rem;
+  height: 37px;
+  margin-right: .25rem;
+  margin-bottom: 0px;
+}
+
 .michaeldmoore-annunciator-panel-w4 {
   width: 3.75rem;
   height: 37px;
@@ -55,7 +62,6 @@
 }
 
 .michaeldmoore-annunciator-panel-value-container {
-  display: table-cell;
   vertical-align: middle;
   text-align: center;
   position: relative;
@@ -68,6 +74,7 @@
 }
 
 .michaeldmoore-annunciator-panel-value {
+  padding: 0px;
 }
 
 .michaeldmoore-annunciator-panel-postfix {

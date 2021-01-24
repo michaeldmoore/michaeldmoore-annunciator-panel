@@ -53,140 +53,149 @@
 
   <div class="section gf-form-group">
     <h5 class="section-heading">Thresholds</h5>
-    <div class="gf-form">
-      <div class="gf-form-inline">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w9" style="background-color: transparent;" />
+    <div class="gf-form-inline">
+      <div class="gf-form">
         <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Display Option</label>
-        <label class="gf-form-label">Col</label>
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w9"></label>
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w3">Col</label>
         <div class="gf-form-inline"
-          ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled' || ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
+          ng-if="ctrl.panel.UpperLimit.DisplayOption !== 'disabled' || ctrl.panel.LowerLimit.DisplayOption !== 'disabled'">
           <label class="gf-form-label michaeldmoore-annunciator-panel-w6">Value</label>
         </div>
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w6">Decimals</label>
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w6">Font size</label>
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w5">Decimals</label>
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w7">Font size</label>
       </div>
     </div>
 
-    <div class="gf-form">
+    <div>
       <div class="gf-form-inline">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Limit</label>
+        <div class="gf-form">
+          <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Limit</label>
+        </div>
+        <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
+          <select class="gf-form-input" ng-model="ctrl.panel.UpperLimit.DisplayOption"
+            ng-options="f for f in ctrl.displayStates1" ng-change="ctrl.render()"></select>
+        </div>
+        <div class="gf-form-inline" ng-if="ctrl.panel.UpperLimit.DisplayOption !== 'disabled'">
+          <div class="gf-form-inline">
+            <span class="gf-form-label">
+              <spectrum-picker ng-model="ctrl.panel.UpperLimit.Color" ng-change="ctrl.render()"></spectrum-picker>
+            </span>
+          </div>
+          <div class="gf-form-inline">
+            <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
+              ng-model="ctrl.panel.UpperLimit.Value" ng-change="ctrl.render()" ng-model-onblur>
+          </div>
+          <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w5" placeholder="auto"
+            data-placement="right" bs-tooltip="'Override automatic decimal precision'"
+            ng-model="ctrl.panel.UpperLimit.Decimals" ng-change="ctrl.refresh()" ng-model-onblur>
+          <div class="gf-form-select-wrapper">
+            <select class="gf-form-input michaeldmoore-annunciator-panel-w7" ng-model="ctrl.panel.UpperLimit.FontSize"
+              ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()"></select>
+          </div>
+        </div>
       </div>
-      <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
-        <select class="gf-form-input" ng-model="ctrl.panel.UpperLimit.DisplayOption"
-          ng-options="f for f in ctrl.displayStates1" ng-change="ctrl.render()"></select>
+    </div>
+
+    <div>
+      <div class="gf-form-inline" ng-if="ctrl.panel.UpperLimit.DisplayOption !== 'disabled'">
+        <div class="gf-form">
+          <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Warning</label>
+        </div>
+        <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
+          <select class="gf-form-input" ng-model="ctrl.panel.UpperWarning.DisplayOption"
+            ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
+        </div>
+        <div class="gf-form-inline" ng-if="ctrl.panel.UpperWarning.DisplayOption !== 'disabled'">
+          <div class="gf-form-inline">
+            <span class="gf-form-label">
+              <spectrum-picker ng-model="ctrl.panel.UpperWarning.Color" ng-change="ctrl.render()"></spectrum-picker>
+            </span>
+          </div>
+          <div class="gf-form-inline">
+            <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
+              ng-model="ctrl.panel.UpperWarning.Value" ng-change="ctrl.render()" ng-model-onblur>
+          </div>
+        </div>
       </div>
-      <div class="gf-form-inline" ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled'">
-        <div class="gf-form-inline">
+    </div>
+
+    <div>
+      <div class="gf-form-inline">
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w9">OK</label>
+        <label class="gf-form-label michaeldmoore-annunciator-panel-w9" style="font-size: 1rem;">static</label>
+        <div class="gf-form">
           <span class="gf-form-label">
-            <spectrum-picker ng-model="ctrl.panel.UpperLimit.Color" ng-change="ctrl.render()"></spectrum-picker>
+            <spectrum-picker ng-model="ctrl.panel.Metric.Color" ng-change="ctrl.render()"></spectrum-picker>
           </span>
         </div>
-        <div class="gf-form-inline">
-          <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
-            ng-model="ctrl.panel.UpperLimit.Value" ng-change="ctrl.render()" ng-model-onblur>
+        <div class="gf-form-inline"
+          ng-if="ctrl.panel.UpperLimit.DisplayOption !== 'disabled' || ctrl.panel.LowerLimit.DisplayOption !== 'disabled'">
+          <label class="gf-form-label michaeldmoore-annunciator-panel-w6"
+            ng-model="ctrl.panel.MetricValueRange">{{ctrl.panel.MetricValueRange}}</label>
         </div>
-        <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w6" placeholder="auto"
+        <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w5" placeholder="auto"
           data-placement="right" bs-tooltip="'Override automatic decimal precision'"
-          ng-model="ctrl.panel.UpperLimit.Decimals" ng-change="ctrl.refresh()" ng-model-onblur>
+          ng-model="ctrl.panel.Metric.Decimals" ng-change="ctrl.render()" ng-model-onblur>
         <div class="gf-form-select-wrapper">
-          <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.UpperLimit.FontSize"
-            ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()" />
+          <select class="gf-form-input michaeldmoore-annunciator-panel-w7" ng-model="ctrl.panel.Metric.FontSize"
+            ng-options="f for f in ctrl.fontSizes" ng-change="ctrl.render()"></select>
         </div>
       </div>
     </div>
 
-    <div class="gf-form" ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled'">
+    <div>
+      <div class="gf-form-inline" ng-if="ctrl.panel.LowerLimit.DisplayOption !== 'disabled'">
+        <div class="gf-form">
+          <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Warning</label>
+        </div>
+        <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
+          <select class="gf-form-input" ng-model="ctrl.panel.LowerWarning.DisplayOption"
+            ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
+        </div>
+        <div class="gf-form-inline" ng-if="ctrl.panel.LowerWarning.DisplayOption !== 'disabled'">
+          <div class="gf-form-inline">
+            <span class="gf-form-label">
+              <spectrum-picker ng-model="ctrl.panel.LowerWarning.Color" ng-change="ctrl.render()"></spectrum-picker>
+            </span>
+          </div>
+          <div class="gf-form-inline">
+            <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
+              ng-model="ctrl.panel.LowerWarning.Value" ng-change="ctrl.render()" ng-model-onblur>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
       <div class="gf-form-inline">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Upper Warning</label>
-      </div>
-      <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
-        <select class="gf-form-input" ng-model="ctrl.panel.UpperWarning.DisplayOption"
-          ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
-      </div>
-      <div class="gf-form-inline" ng-if="ctrl.panel.UpperWarning.DisplayOption != 'disabled'">
-        <div class="gf-form-inline">
-          <span class="gf-form-label">
-            <spectrum-picker ng-model="ctrl.panel.UpperWarning.Color" ng-change="ctrl.render()"></spectrum-picker>
-          </span>
+        <div class="gf-form">
+          <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Limit</label>
         </div>
-        <div class="gf-form-inline">
-          <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
-            ng-model="ctrl.panel.UpperWarning.Value" ng-change="ctrl.render()" ng-model-onblur>
+        <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
+          <select class="gf-form-input" ng-model="ctrl.panel.LowerLimit.DisplayOption"
+            ng-options="f for f in ctrl.displayStates1" ng-change="ctrl.render()"></select>
         </div>
-      </div>
-    </div>
-
-    <div class="gf-form">
-      <label class="gf-form-label michaeldmoore-annunciator-panel-w9">OK</label>
-      <label class="gf-form-label michaeldmoore-annunciator-panel-w9" style="font-size: 1rem;">static</label>
-      <div class="gf-form-inline">
-        <span class="gf-form-label">
-          <spectrum-picker ng-model="ctrl.panel.Metric.Color" ng-change="ctrl.render()"></spectrum-picker>
-        </span>
-      </div>
-      <div class="gf-form-inline"
-        ng-if="ctrl.panel.UpperLimit.DisplayOption != 'disabled' || ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w6"
-          ng-model="ctrl.panel.MetricValueRange">{{ctrl.panel.MetricValueRange}}</label>
-      </div>
-      <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w6" placeholder="auto"
-        data-placement="right" bs-tooltip="'Override automatic decimal precision'" ng-model="ctrl.panel.Metric.Decimals"
-        ng-change="ctrl.render()" ng-model-onblur>
-      <div class="gf-form-select-wrapper">
-        <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.Metric.FontSize"
-          ng-options="f for f in ctrl.fontSizes" ng-change="ctrl.render()" />
-      </div>
-    </div>
-
-    <div class="gf-form" ng-if="ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
-      <div class="gf-form-inline">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Warning</label>
-      </div>
-      <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
-        <select class="gf-form-input" ng-model="ctrl.panel.LowerWarning.DisplayOption"
-          ng-options="f for f in ctrl.displayStates" ng-change="ctrl.render()"></select>
-      </div>
-      <div class="gf-form-inline" ng-if="ctrl.panel.LowerWarning.DisplayOption != 'disabled'">
-        <div class="gf-form-inline">
-          <span class="gf-form-label">
-            <spectrum-picker ng-model="ctrl.panel.LowerWarning.Color" ng-change="ctrl.render()"></spectrum-picker>
-          </span>
-        </div>
-        <div class="gf-form-inline">
-          <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
-            ng-model="ctrl.panel.LowerWarning.Value" ng-change="ctrl.render()" ng-model-onblur>
+        <div class="gf-form-inline" ng-if="ctrl.panel.LowerLimit.DisplayOption !== 'disabled'">
+          <div class="gf-form-inline">
+            <span class="gf-form-label">
+              <spectrum-picker ng-model="ctrl.panel.LowerLimit.Color" ng-change="ctrl.render()"></spectrum-picker>
+            </span>
+          </div>
+          <div class="gf-form-inline">
+            <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
+              ng-model="ctrl.panel.LowerLimit.Value" ng-change="ctrl.render()" ng-model-onblur>
+          </div>
+          <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w5" placeholder="auto"
+            data-placement="right" bs-tooltip="'Override automatic decimal precision'"
+            ng-model="ctrl.panel.LowerLimit.Decimals" ng-change="ctrl.refresh()" ng-model-onblur>
+          <div class="gf-form-select-wrapper">
+            <select class="gf-form-input michaeldmoore-annunciator-panel-w7" ng-model="ctrl.panel.LowerLimit.FontSize"
+              ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()"></select>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="gf-form">
-      <div class="gf-form-inline">
-        <label class="gf-form-label michaeldmoore-annunciator-panel-w9">Lower Limit</label>
-      </div>
-      <div class="gf-form-select-wrapper michaeldmoore-annunciator-panel-w9">
-        <select class="gf-form-input" ng-model="ctrl.panel.LowerLimit.DisplayOption"
-          ng-options="f for f in ctrl.displayStates1" ng-change="ctrl.render()"></select>
-      </div>
-      <div class="gf-form-inline" ng-if="ctrl.panel.LowerLimit.DisplayOption != 'disabled'">
-        <div class="gf-form-inline">
-          <span class="gf-form-label">
-            <spectrum-picker ng-model="ctrl.panel.LowerLimit.Color" ng-change="ctrl.render()"></spectrum-picker>
-          </span>
-        </div>
-        <div class="gf-form-inline">
-          <input type="text" class="gf-form-input michaeldmoore-annunciator-panel-w6"
-            ng-model="ctrl.panel.LowerLimit.Value" ng-change="ctrl.render()" ng-model-onblur>
-        </div>
-        <input type="number" class="gf-form-input michaeldmoore-annunciator-panel-w6" placeholder="auto"
-          data-placement="right" bs-tooltip="'Override automatic decimal precision'"
-          ng-model="ctrl.panel.LowerLimit.Decimals" ng-change="ctrl.refresh()" ng-model-onblur>
-        <div class="gf-form-select-wrapper">
-          <select class="gf-form-input michaeldmoore-annunciator-panel-w6" ng-model="ctrl.panel.LowerLimit.FontSize"
-            ng-options="f for f in ctrl.fontSizes0" ng-change="ctrl.render()" />
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <div class="section gf-form-group">

@@ -1,6 +1,6 @@
 {
   "name": "michaeldmoore-annunciator-panel",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Annunciator panel for Grafana",
   "main": "README.md",
   "scripts": {
@@ -46,6 +46,8 @@
     "micromatch": "^4.0.2"
   },
   "dependencies": {
+    "@grafana/data": "^7.3.7",
+    "@grafana/runtime": "^7.3.7",
     "grunt-contrib-jshint": "^2.1.0",
     "lodash": "^4.17.19"
   },
