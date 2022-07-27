@@ -324,7 +324,7 @@ class AnnunciatorPanelCtrl extends MetricsPanelCtrl {
     }
 
     if (isNumber(OKLowerLimit) && isNumber(OKUpperLimit)) {
-      if (OKUpperLimit > OKLowerLimit) {
+      if (Number(OKUpperLimit) > Number(OKLowerLimit)) {
         this.panel.MetricValueRange = OKLowerLimit + ' -> ' + OKUpperLimit;
       } 
       else {
